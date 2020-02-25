@@ -1,41 +1,59 @@
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
-    game.over(false, effects.slash)
-})
-controller.anyButton.onEvent(ControllerButtonEvent.Pressed, function () {
-    Goku.vy = -35
-})
-function human () {
-    // Makes the character who ges through this game.
-    Goku = sprites.create(img`
-. . . . . . . . . . . . . . . . 
-. . . . b b b b b . . . . . . . 
-b b b b 1 1 1 1 1 b . . . . . . 
-5 5 1 b b 1 1 1 1 1 b . . . . . 
-5 4 1 1 b b 1 1 1 1 1 b . . . . 
-4 2 1 1 1 1 1 1 1 1 1 1 b . . . 
-5 4 1 1 1 1 1 1 1 1 f 1 1 b . . 
-5 5 1 1 1 1 1 1 1 1 1 1 b . . . 
-b b b b b 1 1 1 1 1 b b . . . . 
-. . . b 1 1 1 1 1 b . . . . . . 
-. . . b 1 1 1 1 b . . . . . . . 
-. . . . b b b b . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . 
-`, SpriteKind.Player)
-    Goku.ay = 300
+// This will ask the user a question as they start to
+// fly the plane
+function question () {
+    a_question = game.askForString("What's your name pilot?")
+    game.splash("Land this plane to safety " + a_question)
 }
-let projectile: Sprite = null
-let bottomImage: Image = null
-let topImage: Image = null
-let gap = 0
-let Goku: Sprite = null
-game.splash("Help Boku through the forest to get to his prize! ")
-human()
-scene.setBackgroundColor(6)
-game.onUpdateInterval(1500, function () {
+// This function will make the sprite annimate into a
+// burning plane and will shake the camera
+function score () {
+    animation.runImageAnimation(
+    Plane,
+    [img`
+. . . . . . . . 5 . . . . . . . 
+. . . . . . . . 5 5 5 . . . . . 
+. . . . 5 1 1 1 5 4 4 5 5 . . . 
+. 5 . 5 5 5 1 1 1 4 4 5 5 . . . 
+. 5 1 5 4 4 5 1 1 1 4 4 5 . . . 
+. 5 1 1 4 4 4 5 1 1 1 5 5 . . . 
+. 5 1 1 1 4 4 5 5 1 1 1 1 1 . . 
+. . 1 1 1 1 1 4 4 5 1 1 1 1 . . 
+. . 1 1 1 1 1 1 1 1 1 1 1 f 1 . 
+. . . 5 1 4 1 1 1 1 1 1 1 1 1 . 
+. . . . . . . . . 1 1 1 1 1 1 . 
+. . . . . . . . 1 1 1 1 1 . . . 
+. . . . . . 1 1 1 1 1 1 . . . . 
+. . . 1 1 1 1 1 1 1 1 . . . . . 
+. . . . 1 1 1 . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+`],
+    100,
+    true
+    )
+    scene.cameraShake(14, 5000)
+    Plane.say("AAAHHHHHHHHH")
+}
+function begininng_ () {
+    // This will shw the dialouge to the user
+    game.splash("Warning: To avoid vision loss, wash your eyes to moisturize it.")
+    game.splash("Seriously. please")
+    game.splash("Help guide the plane through the city!")
+}
+function background () {
+    scene.setBackgroundColor(0)
+    // Thi sets the scenery tto  a blizzard
+    effects.blizzard.startScreenEffect()
+}
+function win () {
+    // This will end the game with dialogue at the end
+    game.splash("You've done it " + a_question)
+}
+function obstacles () {
+    // This will create the images/walls
     gap = Math.randomRange(0, 3)
+    // When it comes across the buildings, this will
+    // decide what size of the building that it will
+    // appear
     if (0 == gap) {
         topImage = img`
 . . . . b b b b b b b b b b b b b b b b b . . . 
@@ -208,48 +226,48 @@ game.onUpdateInterval(1500, function () {
 `
     } else if (2 == gap) {
         topImage = img`
-. . . . d d d d d d d d d d d d d d d . . . . . 
-. . . d d d d d d d d d d d d d d d d d d . . . 
-. . d d d d d d d d d d d d d d d d d d d d . . 
-. . d d d d d d d d d d d d d d d d d d d d . . 
-. . d d d d d d d d d d d d d d d d d d d d . . 
-. . . . . d d d d d d d d d d d d d d d d . . . 
-. . . . . d d d d d d d d d d d d d d d d . . . 
-. . . . . d d d d d d d d d d d d d d d . . . . 
-. . . . . d d d d d d d d d d d d d d . . . . . 
-. . . . . d d d d d d d d d d d d d d . . . . . 
-. . . . . d d d d d d d d d d d d d d . . . . . 
-. . . . . d d d d d d d d d d d d d d . . . . . 
-. . . . d d d d d d d d d d d d d d d . . . . . 
-. . . . d d d d d d d d d d d d d d d . . . . . 
-. b d d d d d d d d d d d d d d d d d d d d . . 
-. b d d d d d d d d d d d d d d d d d d d d . . 
-. b d d d d d d d d d d d d d d d d d d d d . . 
-. b d d d d d d d d d d d d d d d d d d d . . . 
-. . b d d d d d d d d d d d d d d d d d . . . . 
-. . b d d d d d d d d d d d d d d d d . . . . . 
-. . b d d d d d d d d d d d d d d d . . . . . . 
-. . b d d d d d d d d d d d d d d d . . . . . . 
-. . b d d d d d d d d d d d d d d d . . . . . . 
-. . b d d d d d d d d d d d d d d d d . . . . . 
-. . b d d d d d d d d d d d d d d d d . . . . . 
-. . b d d d d d d d d d d d d d d d d . . . . . 
-. . b d d d d d d d d d d d d d d d d d . . . . 
-. b b d d d d d d d d d d d d d d d d d . . . . 
-b d d d d d d d d d d d d d d d d d d d d d . . 
-b d d d d d d d d d d d d d d d d d d d d d . . 
-b d d d d d d d d d d d d d d d d d d d d d . . 
-. b b b d d d d d d d d d d d d d d . . . . . . 
-. . . . b d d d d d d d d d d d d d . . . . . . 
-. . . . . b d d d d d d d d d d d d . . . . . . 
-. . . . . b d d d d d d d d d d d d . . . . . . 
-. . . . . b d d d d d d d d d d d d . . . . . . 
-. . . . . b d d d d d d d d d d d d . . . . . . 
-. . . . . b d d d d d d d d d d d d . . . . . . 
-. . . . . b d d d d d d d d d d d d . . . . . . 
-. . . . . b d d d d d d d d d d d d . . . . . . 
-. . . . . . b d d d d d d d d d d . . . . . . . 
-. . . . . . b b d d d d d d d d . . . . . . . . 
+. . . b b b b b b b b b b b b b b b b b . . . . 
+. . b d d d d 1 d d d d d 1 1 d d d d d b . . . 
+. b d d d d 1 d d d d d d 1 d d d d d d d b . . 
+. b d d d d 1 d d d d d d 1 d d d d d d d b . . 
+. b d d d d 1 d d d d d d 1 d d d d d d d b . . 
+. . b b b d d 1 d d d d d 1 d d d d d d b . . . 
+. . . . b d d 1 1 d d d d 1 d d d d d d b . . . 
+. . . . b d d d 1 d d d d d 1 d d d d b . . . . 
+. . . . b d d d 1 d d d d d 1 1 d d b . . . . . 
+. . . . b d d d 1 d d d d d d 1 d d b . . . . . 
+. . . . b d d d 1 d d d d d d 1 d d b . . . . . 
+. . . . b d d d 1 d d d d d d 1 d d b . . . . . 
+. . . b d d d d 1 d d d d d d 1 d d b . . . . . 
+. . b b d d d d 1 d d d d d 1 d d d b . . . . . 
+. b d d d d d d 1 d d d d d d 1 d d d b b b . . 
+. b d d d d d d 1 d d d d d d 1 d d d d d b . . 
+. b d d d d d d d 1 d d d d d 1 d d d d d b . . 
+. b d d d d d d d d 1 d d d d 1 d d d d b . . . 
+. . b d d d d d d d 1 d d d d 1 d d d b . . . . 
+. . b d d d d d d d 1 d d d d 1 d d b . . . . . 
+. . b d d d d d d d 1 d d d d 1 d b . . . . . . 
+. . b d d d d d d d 1 d d d d 1 d b . . . . . . 
+. . b d d d d d d d 1 d d d 1 1 d b . . . . . . 
+. . b d d d d d d d 1 d d d 1 d d d b . . . . . 
+. . b d d d d d d d 1 d d d 1 d d d b . . . . . 
+. . b d d d d d d d 1 d d d 1 d d d b . . . . . 
+. . b d d d d d d 1 1 d d d 1 d d d d b . . . . 
+. b b d d d d d d 1 d d d d 1 d d d d b . . . . 
+b d d d d d d d d 1 d d d d 1 d d d d d b b . . 
+b d d d d d d d d 1 d d d d 1 d d d d d d b . . 
+b d d d d d d d d 1 d d d d 1 d d d b b b b . . 
+. b b b d d d d d 1 d d d d 1 d d b . . . . . . 
+. . . . b d d d d 1 d d d d 1 d d b . . . . . . 
+. . . . . b d d d 1 d d d d 1 d d b . . . . . . 
+. . . . . b d d d 1 d d d d 1 d d b . . . . . . 
+. . . . . b d d d 1 d d d d 1 d d b . . . . . . 
+. . . . . b d d d 1 d d d d 1 d d b . . . . . . 
+. . . . . b d d d 1 d d d d 1 d d b . . . . . . 
+. . . . . b d d d 1 d d d d 1 d d b . . . . . . 
+. . . . . b d d d 1 d d d d 1 d d b . . . . . . 
+. . . . . . b d d 1 d d d d 1 d b . . . . . . . 
+. . . . . . b b b b b b b b b b . . . . . . . . 
 . . . . . . . . . . . . . . . . . . . . . . . . 
 . . . . . . . . . . . . . . . . . . . . . . . . 
 . . . . . . . . . . . . . . . . . . . . . . . . 
@@ -262,135 +280,135 @@ b d d d d d d d d d d d d d d d d d d d d d . .
 . . . . . . . . . . . . . . . . . . . . . . . . 
 . . . . . . . . . . . . . . . . . . . . . . . . 
 . . . . . . . . . . . . . . . . . . . . . . . . 
-. . . . . . . . . . b b b b . . . . . . . . . . 
-. . . . . . . . b b d d d d b b . . . . . . . . 
-. . . . . . . b d d b b b b d d b . . . . . . . 
-. . . . . . b d b b d d d d b b d b . . . . . . 
-. . . . . b d b b d b b b b d b b d b . . . . . 
-. . . . . b d b d b d d d d b d b d b . . . . . 
-. . . . . c d b b d b b b b d b b d c . . . . . 
-. . . . . c b d b b d d d d b b d b c . . . . . 
-. . . . . 1 f b d d b b b b d d b c 1 . . . . . 
-. . . . . 1 1 f f b d d d d b c c 1 1 . . . . . 
-. . . . . 1 1 1 1 f f c c c c 1 1 1 . . . . . . 
-. . . . . c 1 1 1 1 1 1 1 1 1 1 1 1 . . . . . . 
-. . . . . c 1 1 1 1 1 1 1 1 1 1 1 1 . . . . . . 
-. . . . . f 1 1 1 1 1 1 1 1 1 1 1 1 . . . . . . 
-. . . . . c c 1 1 1 1 1 1 1 1 1 1 1 . . . . . . 
-. . . . . . f 1 1 1 1 1 1 1 1 1 1 1 . . . . . . 
-. . . . . 6 f c 1 1 1 1 1 1 1 1 1 1 6 . . . . . 
-. . . . 6 9 9 6 1 1 1 1 1 1 1 1 1 6 9 6 . . . . 
-. . . 6 9 9 9 6 6 6 1 1 1 1 6 6 6 6 9 9 6 . . . 
-. . 6 9 9 6 8 1 6 9 9 6 6 9 9 9 6 6 9 9 9 6 . . 
-. . . 6 6 8 1 1 9 9 6 8 8 6 9 9 8 8 6 6 6 . . . 
-. . . . . . 1 1 9 9 1 1 1 1 9 9 1 c 1 1 . . . . 
-. . . . . . 1 1 6 1 1 1 1 1 1 6 1 1 f . . . . . 
-. . . . . . 1 1 1 1 1 1 1 1 1 1 1 1 f . . . . . 
-. . . . . . 1 1 1 1 1 1 1 1 1 1 1 1 f . . . . . 
-. . . . . . 1 1 1 1 1 1 1 1 1 1 1 c f . . . . . 
-. . . . . . c 1 1 1 1 1 1 1 1 1 1 c f . . . . . 
-. . . . . . c 1 1 1 1 1 1 1 1 1 1 f f . . . . . 
-. . . . . . f 1 1 1 1 1 1 1 1 1 1 f 1 . . . . . 
-. . . . . 6 f 1 1 1 1 1 1 1 1 1 1 f 6 . . . . . 
-. . . . 6 9 9 6 1 1 1 1 1 1 1 1 1 6 9 6 . . . . 
-. . . 6 9 9 9 6 6 6 1 1 1 1 6 6 6 9 9 9 6 . . . 
-. . 6 9 9 6 1 1 6 9 9 9 9 9 9 9 6 6 9 9 9 6 . . 
-. . . 6 6 8 1 1 9 9 6 8 8 6 9 9 8 8 6 6 6 . . . 
-. . . . . . 1 1 9 9 1 1 1 1 6 9 1 1 . . . . . . 
-. . . . . . 1 1 6 1 1 1 1 1 1 6 c 1 . . . . . . 
+. . . . . 4 4 4 4 4 4 4 4 4 4 4 4 4 4 . . . . . 
+. . . . . 4 4 4 4 4 4 4 4 4 4 4 4 4 4 . . . . . 
+. . . . . 4 4 4 4 4 4 4 4 4 4 4 4 4 4 . . . . . 
+. . . . . 4 4 1 1 1 4 4 4 4 1 1 1 4 4 . . . . . 
+. . . . . 4 4 1 1 1 4 4 4 4 1 1 1 4 4 . . . . . 
+. . . . . 4 4 1 1 1 4 4 4 4 1 1 1 4 4 . . . . . 
+. . . . . 4 4 4 4 4 4 4 4 4 4 4 4 4 4 . . . . . 
+. . . . . 4 4 4 4 4 4 4 4 4 4 4 4 4 4 . . . . . 
+. . . . . 4 4 4 4 4 4 4 4 4 4 4 4 4 4 . . . . . 
+. . . . . 4 4 1 1 1 4 4 4 4 1 1 1 4 4 . . . . . 
+. . . . . 4 4 1 1 1 4 4 4 4 1 1 1 4 4 . . . . . 
+. . . . . 4 4 1 1 1 4 4 4 4 1 1 1 4 4 . . . . . 
+. . . . . 4 4 1 1 1 4 4 4 4 1 1 1 4 4 . . . . . 
+. . . . . 4 4 4 4 4 4 4 4 4 4 4 4 4 4 . . . . . 
+. . . . . 4 4 4 4 4 4 4 4 4 4 4 4 4 4 . . . . . 
+. . . . . 4 4 4 4 4 4 4 4 4 4 4 4 4 4 . . . . . 
+. . . . . 4 4 1 1 1 4 4 4 4 1 1 1 4 4 . . . . . 
+. . . . . 4 4 1 1 1 4 4 4 4 1 1 1 4 4 . . . . . 
+. . . . . 4 4 1 1 1 4 4 4 4 1 1 1 4 4 . . . . . 
+. . . . . 4 4 1 1 1 4 4 4 4 1 1 1 4 4 . . . . . 
+. . . . . 4 4 1 1 1 4 4 4 4 1 1 1 4 4 . . . . . 
+. . . . . 4 4 4 4 4 4 4 4 4 4 4 4 4 4 . . . . . 
+. . . . . 4 4 4 4 4 4 4 4 4 4 4 4 4 4 . . . . . 
+. . . . . 4 1 1 1 1 d d d 1 1 1 1 1 4 . . . . . 
+. . . . . 4 1 1 1 1 1 1 1 1 1 1 1 1 4 . . . . . 
+. . . . . 4 1 1 1 1 1 1 1 1 1 1 1 1 4 . . . . . 
+. . . . . 4 1 7 1 1 1 1 1 1 1 1 1 1 4 . . . . . 
+. . . . . 4 1 e 1 1 1 1 1 1 1 1 1 1 4 . . . . . 
+. . . . . 4 4 4 4 4 4 4 4 4 4 4 4 4 4 . . . . . 
+. . . . . 4 4 4 4 e e e f e e e 4 4 4 . . . . . 
+. . . . . 4 4 4 4 e e e f e e e 4 4 4 . . . . . 
+. . . . . 4 4 4 4 e e e f e e e 4 4 4 . . . . . 
+. . . . . 4 4 4 4 e e e f e e e 4 4 4 . . . . . 
+. . . . . 4 4 4 4 e e 5 f e e 5 4 4 4 . . . . . 
+. . . . . 4 4 4 4 e e e f e e e 4 4 4 . . . . . 
+. . . . . 4 4 4 4 e e e f e e e 4 4 4 . . . . . 
 `
     } else {
         topImage = img`
+. . . . . . . . . . d d d d d d 1 d d d d . . . 
+. . . . . . . . 1 1 1 d d d d d 1 d d d d . . . 
+. . . . . . . . 1 d d d d d d d 1 d d d d . . . 
+. . . . . . d d 1 d d d d d d d 1 d d d d . . . 
+. . . . . d d d 1 d d d d d d d 1 d d d d . . . 
+. . . . . d d d 1 d d d d d d d 1 d d d d . . . 
+. . . . . d d d 1 1 d d d d d d 1 1 d d d . . . 
+. . . . d d d d d 1 d d d d d d d 1 d d d . . . 
+. . . . d d d d d 1 d d d d d d d 1 d d d . . . 
+. . . . d d d d d 1 d d d d d d d d 1 d d . . . 
+. . . . d d d d d 1 d d d d d d d d 1 d d . . . 
+. . . . d d d d d 1 d d d d d d d d 1 d d . . . 
+. . . . d d d d 1 d d d d d d d d d 1 d d d . . 
+. . . . d d d 1 d d d d d d d d d d 1 d d d . . 
+. . . . d d d 1 d d d d d d d d d d 1 d d d d . 
+. . . . d d d 1 d d d d d d d d d d 1 d d d d . 
+. . . d d d 1 d d d d d d d d d d d 1 d d d d d 
+. . . d d d 1 d d d d d d d d d d d 1 d d d d d 
+. . . d d 1 d d d d d d d d d d d d 1 d d d d d 
+. . . d d 1 d d d d d d d d d d d d 1 d d d d d 
+. . d d d d 1 d d d d d d d d d d d 1 d d d d d 
+. . d d d d d 1 d d d d d d d d d 1 1 d d d d d 
+. . d d d d d 1 1 d d d d d d 1 1 1 d d d d d d 
+. . d d d d d d 1 d d d d d 1 1 d d d d d d d . 
+. . d d d d d d 1 d d d d 1 1 d d d d d d d d . 
+. . . d d d d d 1 d d d d 1 d d d d d d d d d . 
+. . . d d d d d 1 d d d d 1 d d d d d d d . . . 
+. . . d d d d d 1 d d d d 1 d d d d d d . . . . 
+. . . . d d d d 1 d d d d 1 d d d d d . . . . . 
+. . . . d d d d 1 d d d d 1 d d d d d d . . . . 
+. . . . d d d d 1 d d d d d 1 d d d d d . . . . 
+. . d d d d d d 1 d d d d d 1 d d d d d . . . . 
+. . d d d d d d 1 d d d d d 1 1 d d d d d d . . 
+. . d d d d d d 1 d d d d d d 1 d d d d d d . . 
+. . d d d d d d 1 d d d d d d 1 d d d d d d . . 
+. . d d d d d d 1 d d d d d d 1 d d d d d d . . 
+. . . . d d d d 1 d d d d d d 1 d d d d d d . . 
+. . . . d d d d 1 d d d d d d 1 d d d d . . . . 
+. . . . d d d d 1 d d d d d d 1 d d d d . . . . 
+. . . . d d d d d 1 d d d d d 1 d d d d . . . . 
+. . . . d d d d d 1 d d d d d 1 d d d d . . . . 
+. . . . d d d d d 1 d d d d d 1 d d d d . . . . 
+. . . . d d d d d 1 d d d d d 1 d d d d . . . . 
+. . . . d d d d d 1 d d d d d 1 d d d d . . . . 
+. . . d d d d d d 1 d d d d d 1 d d d d d d d . 
+. . d d d d d d d 1 d d d d d 1 d d d d d d d . 
+. . d d d d d d d 1 d d d d d 1 d d d d d d d . 
+. . d d d d d d d 1 d d d d d 1 d d d d d d d . 
+. . d d d d d d d d 1 d d d d 1 d d d d d d d . 
+. . d d d d d d d d 1 d d d d 1 d d d d d . . . 
+. . d d d d d d d 1 d d d d d 1 d d d d d . . . 
+. . d d d d d d d 1 d d d d d 1 1 d d d d . . . 
+. . . d d d d d d 1 d d d d d d 1 d d d . . . . 
+. . . d d d d d d 1 d d d d d d d 1 d d d . . . 
+. . . d d d d d d 1 d d d d d d d 1 d d d . . . 
+. . . d d d d d 1 1 d d d d d d d 1 d d d d . . 
+. . . d d d d d 1 d d d d d d d d 1 d d d d . . 
+. . . d d d d d 1 d d d d d d d d 1 d d d d . . 
+. . d d d d d d 1 d d d d d d d d 1 d d d d . . 
+. . d d d d d d 1 d d d d d d d d 1 d d d d . . 
+. . d d d d d d 1 d d d d d d d 1 d d d d d . . 
+. . . d d d d d 1 d d d d d . . . . . . . . . . 
+. . . . d d d d 1 d d d . . . . . . . . . . . . 
 . . . . . . . . . . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . . . . . . . . . 
-. . . . . . . . . . b b b b . . . . . . . . . . 
-. . . . . . . . b b d d d d b b . . . . . . . . 
-. . . . . . . b d d b b b b d d b . . . . . . . 
-. . . . . . b d b b d d d d b b d b . . . . . . 
-. . . . . b d b b d b b b b d b b d b . . . . . 
-. . . . . b d b d b d d d d b d b d b . . . . . 
-. . . . . c d b b d b b b b d b b d c . . . . . 
-. . . . . c b d b b d d d d b b d b c . . . . . 
-. . . . . 1 f b d d b b b b d d b c 1 . . . . . 
-. . . . . 1 1 f f b d d d d b c c 1 1 . . . . . 
-. . . . . 1 1 1 1 f f c c c c 1 1 1 . . . . . . 
-. . . . . c 1 1 1 1 1 1 1 1 1 1 1 1 . . . . . . 
-. . . . . c 1 1 1 1 1 1 1 1 1 1 1 1 . . . . . . 
-. . . . . f 1 1 1 1 1 1 1 1 1 1 1 1 . . . . . . 
-. . . . . c c 1 1 1 1 1 1 1 1 1 1 1 . . . . . . 
-. . . . . . f 1 1 1 1 1 1 1 1 1 1 1 . . . . . . 
-. . . . . 6 f c 1 1 1 1 1 1 1 1 1 1 6 . . . . . 
-. . . . 6 9 9 6 1 1 1 1 1 1 1 1 1 6 9 6 . . . . 
-. . . 6 9 9 9 6 6 6 1 1 1 1 6 6 6 6 9 9 6 . . . 
-. . 6 9 9 6 8 1 6 9 9 6 6 9 9 9 6 6 9 9 9 6 . . 
-. . . 6 6 8 1 1 9 9 6 8 8 6 9 9 8 8 6 6 6 . . . 
-. . . . . . 1 1 9 9 1 1 1 1 9 9 1 c 1 1 . . . . 
-. . . . . . 1 1 6 1 1 1 1 1 1 6 1 1 f . . . . . 
-. . . . . . 1 1 1 1 1 1 1 1 1 1 1 1 f . . . . . 
-. . . . . . 1 1 1 1 1 1 1 1 1 1 1 1 f . . . . . 
-. . . . . . 1 1 1 1 1 1 1 1 1 1 1 c f . . . . . 
-. . . . . . c 1 1 1 1 1 1 1 1 1 1 c f . . . . . 
-. . . . . . c 1 1 1 1 1 1 1 1 1 1 f f . . . . . 
-. . . . . . f 1 1 1 1 1 1 1 1 1 1 f 1 . . . . . 
-. . . . . 6 f 1 1 1 1 1 1 1 1 1 1 f 6 . . . . . 
-. . . . 6 9 9 6 1 1 1 1 1 1 1 1 1 6 9 6 . . . . 
-. . . 6 9 9 9 6 6 6 1 1 1 1 6 6 6 9 9 9 6 . . . 
-. . 6 9 9 6 1 1 6 9 9 9 9 9 9 9 6 6 9 9 9 6 . . 
-. . . 6 6 8 1 1 9 9 6 8 8 6 9 9 8 8 6 6 6 . . . 
-. . . . . . 1 1 9 9 1 1 1 1 6 9 1 1 . . . . . . 
-. . . . . . 1 1 6 1 1 1 1 1 1 6 c 1 . . . . . . 
-. . . . . . 1 1 f 1 1 1 1 1 1 1 c 1 . . . . . . 
-. . . . . . 1 1 c 1 1 1 1 1 1 1 c 1 . . . . . . 
-. . . . . . 1 1 c 1 1 1 1 1 1 1 f 1 . . . . . . 
-. . . . . . 1 1 c 1 1 1 1 1 1 1 f 1 . . . . . . 
-. . . . . . 1 1 1 1 1 1 1 1 1 1 f 1 . . . . . . 
-. . . . . . 1 1 1 1 1 1 1 1 1 1 c 1 . . . . . . 
-. . . . . 6 1 1 1 1 1 1 1 1 1 1 c 1 6 . . . . . 
-. . . . 6 9 9 6 1 1 1 1 1 1 1 1 1 6 9 6 . . . . 
-. . . 6 9 9 6 6 6 6 1 1 1 1 6 9 6 6 9 9 6 . . . 
-. . 6 9 9 6 1 1 9 9 9 9 9 9 9 9 6 6 9 9 9 6 . . 
-. . . 6 6 8 c 1 9 9 6 8 8 6 9 9 8 8 6 6 6 . . . 
-. . . . . . c 1 9 9 1 1 1 1 6 9 1 1 . . . . . . 
-. . . . . . c 1 6 1 1 1 1 1 1 6 1 1 . . . . . . 
-. . . . . . c 1 1 1 1 1 1 1 1 1 1 1 . . . . . . 
-. . . . . . f c c 1 1 1 1 1 1 c 1 1 . . . . . . 
-. . . . . . f c c c 1 1 1 c 1 c c 1 . . . . . . 
-. . . . . . f c c 1 1 1 c c 1 c c c . . . . . . 
-. . . . . . f c c c 1 1 c c 1 c c c . . . . . . 
-. . . . . . f c c c c c 1 c 1 1 c c . . . . . . 
-. . . . . 6 f c c c c c c c c c c f 6 . . . . . 
-. . . . 6 9 9 6 c c c c c c c c c 6 9 6 . . . . 
-. . . 6 9 9 6 6 9 6 c c c c 6 9 6 6 9 9 6 . . . 
-. . 6 9 9 6 c c 9 9 9 9 9 9 9 9 6 6 9 9 9 6 . . 
-. . . 6 6 8 c c 9 9 6 8 8 6 9 9 8 8 6 6 6 . . . 
-. . . . . . c c 9 9 c c c c 6 9 c f . . . . . . 
-. . . . . . c c 6 c c c c c c 6 c f . . . . . . 
 `
         bottomImage = img`
 . . . . . . . . . . . . . . . . . . . . . . . . 
-. . . . . . . . . . b b b b . . . . . . . . . . 
-. . . . . . . . b b d d d d b b . . . . . . . . 
-. . . . . . . b d d b b b b d d b . . . . . . . 
-. . . . . . b d b b d d d d b b d b . . . . . . 
-. . . . . b d b b d b b b b d b b d b . . . . . 
-. . . . . b d b d b d d d d b d b d b . . . . . 
-. . . . . c d b b d b b b b d b b d c . . . . . 
-. . . . . c b d b b d d d d b b d b c . . . . . 
-. . . . . 1 f b d d b b b b d d b c 1 . . . . . 
-. . . . . 1 1 f f b d d d d b c c 1 1 . . . . . 
-. . . . . 1 1 1 1 f f c c c c 1 1 1 . . . . . . 
-. . . . . c 1 1 1 1 1 1 1 1 1 1 1 1 . . . . . . 
-. . . . . c 1 1 1 1 1 1 1 1 1 1 1 1 . . . . . . 
-. . . . . f 1 1 1 1 1 1 1 1 1 1 1 1 . . . . . . 
-. . . . . c c 1 1 1 1 1 1 1 1 1 1 1 . . . . . . 
-. . . . . . f 1 1 1 1 1 1 1 1 1 1 1 . . . . . . 
-. . . . . 6 f c 1 1 1 1 1 1 1 1 1 1 6 . . . . . 
-. . . . 6 9 9 6 1 1 1 1 1 1 1 1 1 6 9 6 . . . . 
-. . . 6 9 9 9 6 6 6 1 1 1 1 6 6 6 6 9 9 6 . . . 
-. . 6 9 9 6 8 1 6 9 9 6 6 9 9 9 6 6 9 9 9 6 . . 
-. . . 6 6 8 1 1 9 9 6 8 8 6 9 9 8 8 6 6 6 . . . 
-. . . . . . 1 1 9 9 1 1 1 1 9 9 1 c 1 1 . . . . 
-. . . . . . 1 1 6 1 1 1 1 1 1 6 1 1 f . . . . . 
+. . . . a a a a a a a a a a a a a a a a . . . . 
+. . . . a a a a a a a a a a a a a a a a . . . . 
+. . . . a a a a a a a a a a a a a a a a . . . . 
+. . . . a a 1 1 1 a a a a a a 1 1 1 a a . . . . 
+. . . . a a 1 1 1 a a a a a a 1 1 1 a a . . . . 
+. . . . a a 1 1 1 a a a a a a 1 1 1 a a . . . . 
+. . . . a a a a a a a a a a a a a a a a . . . . 
+. . . . a a a a a a a a a a a a a a a a . . . . 
+. . . . a a a a a a a a a a a a a a a a . . . . 
+. . . . a a 1 1 1 a a a a a a 1 1 1 a a . . . . 
+. . . . a a 1 1 1 a a a a a a 1 1 1 a a . . . . 
+. . . . a a 1 1 1 a a a a a a 1 1 1 a a . . . . 
+. . . . a a a a a a a a a a a a a a a a . . . . 
+. . . . a a a a a a a a a a a a a a a a . . . . 
+. . . . a a 1 1 1 a a a a a a 1 1 1 a a . . . . 
+. . . . a a 1 1 1 a a a a a a 1 1 1 a a . . . . 
+. . . . a a 1 1 1 a a a a a a 1 1 1 a a . . . . 
+. . . . a a a a a a a a a a a a a a a a . . . . 
+. . . . a a a a a a a a a a a a a a a a . . . . 
+. . . . a a a a a e e e e e e a a a a a . . . . 
+. . . . a a a a a e e e e e e a a a a a . . . . 
+. . . . a a a a a e e 5 e e 5 a a a a a . . . . 
+. . . . a a a a a e e e e e e a a a a a . . . . 
 `
     }
     projectile = sprites.createProjectileFromSide(topImage, -45, 0)
@@ -398,9 +416,65 @@ b d d d d d d d d d d d d d d d d d d d d d . .
     projectile = sprites.createProjectileFromSide(bottomImage, -45, 0)
     projectile.bottom = scene.screenHeight()
     info.changeScoreBy(1)
+    if (info.score() >= 10) {
+        score()
+    }
+    if (info.score() == 24) {
+        win()
+        game.over(true, effects.confetti)
+    }
+}
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
+    // Game will be over when the user its the building or
+    // cloud
+    game.over(false, effects.slash)
+})
+controller.anyButton.onEvent(ControllerButtonEvent.Pressed, function () {
+    // This will mve the plane
+    Plane.vy = -50
+})
+// this will make our plane and sprite
+function human2 () {
+    // Makes the character who ges through this game.
+    Plane = sprites.create(img`
+. . . . . . . . . . . . . . . . 
+. . . . b b b b b . . . . . . . 
+b b b b 1 1 1 1 1 b . . . . . . 
+5 5 1 b b 1 1 1 1 1 b . . . . . 
+5 4 1 1 b b 1 1 1 1 1 b . . . . 
+4 2 1 1 1 1 1 1 1 1 1 1 b . . . 
+5 4 1 1 1 1 1 1 1 1 f 1 1 b . . 
+5 5 1 1 1 1 1 1 1 1 1 1 b . . . 
+b b b b b 1 1 1 1 1 b b . . . . 
+. . . b 1 1 1 1 1 b . . . . . . 
+. . . b 1 1 1 1 b . . . . . . . 
+. . . . b b b b . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+`, SpriteKind.Player)
+    Plane.ay = 300
+    Plane.say("Wow, thats a big cloud")
+}
+let projectile: Sprite = null
+let bottomImage: Image = null
+let topImage: Image = null
+let gap = 0
+let Plane: Sprite = null
+let a_question = ""
+begininng_()
+question()
+// These will call the blocks on the inside of the
+// function
+human2()
+background()
+game.onUpdateInterval(1500, function () {
+    obstacles()
 })
 game.onUpdate(function () {
-    if (Goku.bottom > 120 || Goku.top < 0) {
+    // This will end the game in a loss for the user.
+    if (Plane.bottom > 120 || Plane.top < 0) {
         game.over(false)
     }
 })
