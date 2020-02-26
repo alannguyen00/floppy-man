@@ -1,8 +1,17 @@
-// This will ask the user a question as they start to
-// fly the plane
-function question () {
-    a_question = game.askForString("What's your name pilot?")
-    game.splash("Land this plane to safety " + a_question)
+function begininng () {
+    // This will shw the dialouge to the user
+    game.splash("Warning: To avoid vision loss, wash your eyes to moisturize it.")
+    game.splash("Seriously. please")
+    game.splash("Help guide the plane through the city!")
+}
+function background () {
+    scene.setBackgroundColor(0)
+    // Thi sets the scenery tto  a blizzard
+    effects.blizzard.startScreenEffect()
+}
+function win () {
+    // This will end the game with dialogue at the end
+    game.splash("You've done it " + a_question)
 }
 // This function will make the sprite annimate into a
 // burning plane and will shake the camera
@@ -33,21 +42,21 @@ function score () {
     scene.cameraShake(14, 5000)
     Plane.say("AAAHHHHHHHHH")
 }
-function begininng_ () {
-    // This will shw the dialouge to the user
-    game.splash("Warning: To avoid vision loss, wash your eyes to moisturize it.")
-    game.splash("Seriously. please")
-    game.splash("Help guide the plane through the city!")
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
+    // Game will be over when the user its the building or
+    // cloud
+    game.over(false, effects.slash)
+})
+// This will ask the user a question as they start to
+// fly the plane
+function question () {
+    a_question = game.askForString("What's your name pilot?")
+    game.splash("Land this plane to safety " + a_question)
 }
-function background () {
-    scene.setBackgroundColor(0)
-    // Thi sets the scenery tto  a blizzard
-    effects.blizzard.startScreenEffect()
-}
-function win () {
-    // This will end the game with dialogue at the end
-    game.splash("You've done it " + a_question)
-}
+controller.anyButton.onEvent(ControllerButtonEvent.Pressed, function () {
+    // This will mve the plane
+    Plane.vy = -50
+})
 function obstacles () {
     // This will create the images/walls
     gap = Math.randomRange(0, 3)
@@ -424,17 +433,8 @@ b d d d d d d d d 1 d d d d 1 d d d b b b b . .
         game.over(true, effects.confetti)
     }
 }
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
-    // Game will be over when the user its the building or
-    // cloud
-    game.over(false, effects.slash)
-})
-controller.anyButton.onEvent(ControllerButtonEvent.Pressed, function () {
-    // This will mve the plane
-    Plane.vy = -50
-})
 // this will make our plane and sprite
-function human2 () {
+function human () {
     // Makes the character who ges through this game.
     Plane = sprites.create(img`
 . . . . . . . . . . . . . . . . 
@@ -463,7 +463,7 @@ let topImage: Image = null
 let gap = 0
 let Plane: Sprite = null
 let a_question = ""
-begininng_()
+begininng()
 question()
 // These will call the blocks on the inside of the
 // function
