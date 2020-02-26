@@ -1,5 +1,5 @@
 {
-    "name": "floppy man",
+    "name": "ground plane",
     "description": "",
     "dependencies": {
         "device": "*",
